@@ -52,9 +52,11 @@
     + 官方教程[https://docs.python.org/3/tutorial]
   + 要求：
     + 掌握Python数据类型（如list和tuple）
-    + 基本语句（if,for，open)
+    + 基本语句（if,for,open)
     + 基本环境搭建和调包（人总不能连别人的作业都不会抄）
 + JavaScript/Nodejs
+  + 新手入门的时候常常会误认为js是java的一种，其实这两个语言可差太多了,这里抄一段wiki的解释。<blockquote>ECMAScript是由网景的布兰登·艾克开发的一种脚本语言的标准化规范；最初命名为Mocha，后来改名为LiveScript，最后重命名为JavaScript。1995年12月，升阳与网景联合发表了JavaScript。1996年11月，网景公司将JavaScript提交给欧洲计算机制造商协会进行标准化。</blockquote>由此可见，es或许是更规范的称呼。一开始，js主要用于简单地控制浏览器，但后来由于种种原因（或许是前端觉得，js这么好，为啥我不能用这玩意写后端！），大家也希望服务端也可以跑js代码。于是nodejs就出现了。
+
 + Go
 + Java
 + Rust<br>
@@ -65,6 +67,9 @@
 ## 常用工具
 ### 编辑器/IDE
 + vscode 
+  + 简述：vscode的好处是胜在轻量，而且拥有较为全面的插件，你几乎可以用vsocde干各种事情，比如写论文（markdown），甚至刷知乎。但值得注意的是vscode本身是一个编辑器，你不能过于希望其无所不能，比如安卓开发，你不能指望vscode加个虚拟机进去（所以这时候建议还是老老实实用android studio）
++ JB全家桶
++ 
 ### 请求发送工具
 
 ## 前端
