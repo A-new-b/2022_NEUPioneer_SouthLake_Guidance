@@ -6,6 +6,10 @@
 
 
 
+### 常规用法
+
+
+
 就我个人来看，C语言中的宏很像是一种字符处理工具。在预处理器阶段，将宏指令替换成对应的字符。
 
 比如说，我们常用的包含头文件，我们利用如下源代码来观察：
@@ -318,7 +322,124 @@ ZZ(x) - + *
 
 
 
+### 一些特殊风格
 
+
+
+接下来我们来考察一个很多程序员可能会使用的书写风格：
+
+```c
+#define prf(fmt, ...) __builtin_printf(fmt, ## __VA_ARGS__)
+
+int main() {
+    int a = 0;
+    if (a == 0) {
+        prf("isZero\n");
+        a = 10;
+    } else {
+        prf("notZero\n");
+        a = 0;
+    }
+    return 0;
+}
+```
+
+我们不考虑该程序的实用价值以及一些特殊语法，单单观看 `if-else` 语法就会发现内部是格式相同的两段文字，只有部分内容不太一样。这样我们可以尝试使用一个宏来处理。
+
+```c
+#define prf(fmt, ...) __builtin_printf(fmt, ## __VA_ARGS__)
+
+#define DOthis(str, num) prf(str); \
+a = num;
+
+int main() {
+    int a = 0;
+    if (a == 0) {
+        DOthis("isZero\n", 10);
+    } else {
+        DOthis("notZero\n", 0);
+    }
+    return 0;
+}
+```
+
+我们对其进行预处理，得到：
+
+```c
+int main() {
+    int a = 0;
+    if (a == 0) {
+        __builtin_printf("isZero\n"); a = 10;;
+    } else {
+        __builtin_printf("notZero\n"); a = 0;;
+    }
+    return 0;
+}
+```
+
+确实是我们需要的内容。
+
+但是呢，我们知道的是，我们这样包装宏函数以后，在其他人来看就是一个函数的形式罢了。那么就会有人这么使用：
+
+```c
+#define prf(fmt, ...) __builtin_printf(fmt, ## __VA_ARGS__)
+
+#define DOthis(str, num) prf(str); \
+a = num;
+
+int main() {
+    int a = 0;
+    if (a == 0) DOthis("isZero\n", 10);
+    else DOthis("notZero\n", 0);
+    return 0;
+}
+```
+
+这样形式会更加简单，但是很明显这里面是有可能出现问题的。以上程序无法通过编译，里面的原因很容易看出来，我们省略掉了花括号但是 `DOthis` 宏函数依然是一个包含两个语句的宏，它展开以后也是两条语句，这会导致接下来的 `else` 找不到前面的 `if` ，这也是一个严重的隐患，比如可以考虑如果没有接上 `else` 那么这个程序是可以编译的，这样会有什么样的结果可以读者自己尝试尝试。
+
+为了解决这样的问题，我们可以使用如下的风格：
+
+```c
+#define prf(fmt, ...) __builtin_printf(fmt, ## __VA_ARGS__)
+
+#define DOthis(str, num) do { \
+    prf(str); \
+    a = num; \
+} while (0)
+
+int main() {
+    int a = 0;
+    if (a == 0) DOthis("isZero\n", 10);
+    else DOthis("notZero\n", 0);
+    return 0;
+}
+```
+
+用一个 `do-while` 将内容括起来，这样的书写风格在GNU的源代码里比较常见。
+
+可是，也会有很机敏的友友会这么写：
+
+```c
+#define prf(fmt, ...) __builtin_printf(fmt, ## __VA_ARGS__)
+
+#define DOthis(str, num) { \
+    prf(str); \
+    a = num; \
+}
+
+int main() {
+    int a = 0;
+    if (a == 0) DOthis("isZero\n", 10)
+    else DOthis("notZero\n", 0)
+    return 0;
+}
+```
+
+直接用花括号括起来，即直接改成一个代码块。这也是一个办法，直观。如果写成一个函数形式的宏函数，那么并期望它的行为可以和函数类似，比如当函数在结尾的时候，我们需要加上分号，使用 `do-while` 风格会很理想。
+
+如果是 `do-while` 风格，最后的分号如果没有添加会编译报错，但是下面的单纯花括号版本则不会。
+
+但是无论怎么解释，依然是自己习惯的风格最好。
 
 
 
