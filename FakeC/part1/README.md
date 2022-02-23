@@ -2,7 +2,7 @@
 
 
 
-- gcc
+- [gcc](gcc-knowledge.md)
 - vim
 - make
 - git
