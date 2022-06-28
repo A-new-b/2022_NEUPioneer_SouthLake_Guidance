@@ -183,7 +183,7 @@ $$
 
 #### FIRST
 
-first($\alpha$) 集合被定义为可从 $\alpha$ 推导得到的串的首符号的集合。其中 $\alpha$ 是任意的文法符号串。
+first( $\alpha$ ) 集合被定义为可从 $\alpha$ 推导得到的串的首符号的集合。其中 $\alpha$ 是任意的文法符号串。
 
 $$
 first(\alpha) = \{t | \alpha \Rightarrow^* t \dots, \space t \in V_T\}
@@ -194,10 +194,10 @@ $$
 执行如下规则直到再没有新的终结符号或者 $\epsilon$ 可以被加入到任何 first 集合中。
 
 1. 如果 X 是一个终结符，那么 first(X) = X
-2. 如果 X 是一个非终结符号，且 $X \rightarrow Y_1Y_2Y_3 \dots Y_k$ 是一个产生式，其中 $k \geq 1$，那么如果对于某个 i，a 在 first($Y_i$) 中，且 $Y_1Y_2Y_3 \dots Y_{i-1} \Rightarrow^* \epsilon$。那么把 a 加入 first(X)中。
+2. 如果 X 是一个非终结符号，且 $X \rightarrow Y_1Y_2Y_3 \dots Y_k$ 是一个产生式，其中 $k \geq 1$，那么如果对于某个 i，a 在 first( $Y_i$ ) 中，且 $Y_1Y_2Y_3 \dots Y_{i-1} \Rightarrow^* \epsilon$。那么把 a 加入 first(X)中。
 3. 如果 X 是一个非终结符号，且有 $X \rightarrow^* \epsilon$，那么将 $\epsilon$ 加入到 first(X) 中。
 
-#### Follow
+#### FOLLOW
 
 对于非终结符号 A，follow(A) 被定义为可能在某些句型中紧跟在 A 右边的终结符号的集合。
 
@@ -210,8 +210,8 @@ $$
 执行如下规则直到再没有新的终结符号可以被加入到任何 follow 集合中。
 
 1. 将 # 加入到 follow(Z) 中，其中 Z 是开始符号，而 # 是输入串的结束符号。
-2. 如果存在一个产生式 $A \rightarrow \alpha B \beta$，那么 first($\beta$) 中除了 $\epsilon$ 之外的所有符号都在 follow(B) 中。
-3. 如果存在一个产生式 $A \rightarrow \alpha B$，或者存在产生式 $A \rightarrow \alpha B \beta$ 且 first($\beta$) 包含 $\epsilon$，那么 follow(A) 中的所有符号都在 follow(B) 中。
+2. 如果存在一个产生式 $A \rightarrow \alpha B \beta$，那么 first( $\beta$ ) 中除了 $\epsilon$ 之外的所有符号都在 follow(B) 中。
+3. 如果存在一个产生式 $A \rightarrow \alpha B$，或者存在产生式 $A \rightarrow \alpha B \beta$ 且 first( $\beta$ ) 包含 $\epsilon$，那么 follow(A) 中的所有符号都在 follow(B) 中。
 
 #### SELECT
 
@@ -230,7 +230,7 @@ select(A\rightarrow \alpha) = first(\alpha)
 $$
 
 > 1. 如果 $\alpha = \epsilon$ 则 $first(\alpha) = \emptyset$
-> 2. 设 # 为输入串的结束符号，则 $\# \in follow(Z)$
+> 2. 设 # 为输入串的结束符号，则 $\sharp \in follow(Z)$
 
 ### 设计实现
 
@@ -321,8 +321,8 @@ LR(0) 文法满足下述特点：
 1. 拓展文法，构造句柄识别器
 2. 根据句柄识别器，填写 LR(0) 分析表
     1. 若 $\delta(i, x) = k, \space x \in (V_N + V_T)$，则 $R(i, x) = xk$
-    2. 若状态 $i$ 标记有归约 $r(j)$，则对任何 $a \in (V_T + \{ \# \})$，则 $R(i, a) = r(j)$
-    3. $R(1, \#) = ok$
+    2. 若状态 $i$ 标记有归约 $r(j)$，则对任何 $a \in (V_T + \{ \sharp \})$，则 $R(i, a) = r(j)$
+    3. $R(1, \sharp) = ok$
 3. 程序设计如下：
     1. 开始栈情况为 `#0`
     2. NEXT(w)
@@ -332,7 +332,7 @@ LR(0) 文法满足下述特点：
         - 若 R 为 wi，移进 wi，跳转到步骤 2
         - 若 R 为 r(j)，归约步骤如下，然后跳转到步骤 3
             - 取 $A \rightarrow \alpha$ (j)
-            - POP($\alpha$)，也即弹出产生式右侧内容
+            - POP( $\alpha$ )，也即弹出产生式右侧内容
             - 若 R(xk, A) = Ai，则 PUSH(Ai)
 
 xk 栈顶文法出现。
@@ -430,7 +430,7 @@ LastVT(P) ={a| P $\Rightarrow^+$ ... a 或 P $\Rightarrow^+$ ... a R}。
 
 设 pos(E) 为表达式 E 的逆波兰式：
 
-1. pos($E_1 \omega E_2$) = pos($E_1$) pos($E_2$) $\omega$
+1. pos( $E_1 \omega E_2$ ) = pos( $E_1$ ) pos( $E_2$ ) $\omega$
 2. pos((E)) = pos(E)
 3. pos(i) = 1
 
@@ -455,16 +455,16 @@ LastVT(P) ={a| P $\Rightarrow^+$ ... a 或 P $\Rightarrow^+$ ... a R}。
 
 基本形式：
 
-q: ($\omega$, object1, object2, result)
+q: ( $\omega$, object1, object2, result)
 
 也即，算符，对象1，对象2，结果
 
 设 quat(E)，res(E) 分别为表达式 E 的四元式和结果变量。
 
-1. quat($E_1 \omega E_2$) =>
-    - quat($E_1$)
-    - quat($E_2$)
-    - q: ($\omega$, res($E_1$), res($E_2$), ti)
+1. quat( $E_1 \omega E_2$) =>
+    - quat( $E_1$ )
+    - quat( $E_2$ )
+    - q: ( $\omega$, res( $E_1$ ), res( $E_2$ ), ti)
 2. quat((E)) =>
     - quat(E)
 3. quat(i) =>
@@ -604,7 +604,7 @@ DAG 是指无环有向图，这里用来对基本块内的四元式序列进行�
 
 变量的定义点和应用点
 
-设有四元式：q: ($\omega$, B, C, A)
+设有四元式：q: ( $\omega$, B, C, A)
 
 该四元式是 B、C 的应用点，是 A 的定义点。
 
